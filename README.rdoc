@@ -55,7 +55,7 @@ Run -h with each command to get a view of options for the command.
 
 == Meta
 
-Maintained by Ricardo Chimal, Jr. (ricardo at heroku dot com)
+Original Gem (taps, taps-taps) not actively maintained. This Gem maintained by Cecili Reid (cecili dot reid at tinroofsoftware dot com)
 
 Written by Ricardo Chimal, Jr. (ricardo at heroku dot com) and Adam Wiggins (adam at heroku dot com)
 
