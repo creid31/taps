@@ -30,6 +30,23 @@ or when you want to transfer tables that start with a word
 
   $ taps push postgres://dbuser:dbpassword@localhost/dbname http://httpuser:httppassword@example.com:5000 --filter '^log_'
 
+== Usage: Options
+Run -h with each command to get a view of options for the command.
+  $ taps pull -h
+  Usage: taps pull [OPTIONS] <local_database_url> <remote_url>
+  Pull a database from a taps server
+      -s, --skip-schema                Don't transfer the schema, just data
+      -i, --indexes-first              Transfer indexes first before data
+      -r, --resume=file                Resume a Taps Session from a stored file
+      -c, --chunksize=N                Initial Chunksize
+      -g, --disable-compression        Disable Compression
+      -f, --filter=regex               Regex Filter for tables
+      -t, --tables=A,B,C               Shortcut to filter on a list of tables
+      -e, --exclude_tables=A,B,C       Shortcut to exclude a list of tables
+      -d, --debug                      Enable Debug Messages
+  
+
+
 == Known Issues
 
 * Foreign key constraints get lost in the schema transfer

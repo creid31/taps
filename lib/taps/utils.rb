@@ -3,7 +3,8 @@ require 'stringio'
 require 'time'
 require 'tempfile'
 require 'rest_client'
-
+require 'byebug'
+require 'rbconfig'
 require 'taps/errors'
 require 'taps/chunksize'
 
@@ -11,14 +12,18 @@ module Taps
 module Utils
   extend self
 
-  def windows?
-    return @windows if defined?(@windows)
-    require 'rbconfig'
-    @windows = !!(::Config::CONFIG['host_os'] =~ /mswin|mingw/)
-  end
+  # Determine if os is windows
+  # def windows?
+  #   byebug
+  #   return @windows if defined?(@windows)
+  #   byebug
+  #   @windows = RbConfig::CONFIG['host_os'] =~ /mswin|mingw/i
+  # end
 
+  # Change commands based on os
   def bin(cmd)
-    cmd = "#{cmd}.cmd" if windows?
+    byebug
+    # cmd = "#{cmd}.cmd" if windows?
     cmd
   end
 
@@ -129,6 +134,7 @@ Data   : #{data}
   end
 
   def schema_bin(*args)
+    byebug
     bin_path = File.expand_path("#{File.dirname(__FILE__)}/../../bin/#{bin('schema')}")
     `"#{bin_path}" #{args.map { |a| "'#{a}'" }.join(' ')}`
   end

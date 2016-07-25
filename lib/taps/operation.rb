@@ -7,6 +7,7 @@ require 'taps/config'
 require 'taps/utils'
 require 'taps/data_stream'
 require 'taps/errors'
+require 'byebug'
 
 # disable warnings, rest client makes a lot of noise right now
 $VERBOSE = nil
@@ -58,7 +59,8 @@ class Operation
       end
       ntables
     else
-      tables.reject { |t| exclude_tables.include?(t.to_s) || (re && re.match(t.to_s).nil?) }
+      # Reject anything in exclude_tables list and that match the regex (i.e. recycle bin tables in oracle)
+      tables.reject { |t| exclude_tables.include?(t.to_s) || !(re && re.match(t.to_s).nil?) }
     end
   end
 
@@ -355,9 +357,9 @@ class Pull < Operation
     apply_table_filter(tables).each do |table_name|
       retries = 0
       begin
-        count = session_resource['pull/table_count'].post({:table => table_name}, http_headers).to_s.to_i
+        count = session_resource['pull/table_count'].post({:table => table_name}, http_headers).to_s.to_f
         data[table_name] = count
-      rescue RestClient::Exception
+      rescue RestClient::Exception => e
         retries += 1
         retry if retries <= max_retries
         puts "Unable to fetch tables information from #{remote_url}. Please check the server log."
@@ -438,6 +440,7 @@ class Push < Operation
 
     progress = ProgressBar.new('Schema', tables.size)
     tables.each do |table, count|
+      byebug
       schema_data = Taps::Utils.schema_bin(:dump_table, database_url, table)
       log.debug "Table: #{table}\n#{schema_data}\n"
       session_resource['push/schema'].post(schema_data, http_headers)

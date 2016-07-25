@@ -2,7 +2,7 @@ $:.unshift File.expand_path("../lib", __FILE__)
 require "taps/version"
 
 Gem::Specification.new do |gem|
-  gem.name        = "taps-taps"
+  gem.name        = "tinroof-taps"
   gem.version     = Taps.version
   gem.author      = "Ricardo Chimal, Jr."
   gem.email       = "ricardo@heroku.com"
