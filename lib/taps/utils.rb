@@ -22,7 +22,6 @@ module Utils
 
   # Change commands based on os
   def bin(cmd)
-    byebug
     # cmd = "#{cmd}.cmd" if windows?
     cmd
   end

@@ -106,6 +106,7 @@ class DataStream
   end
 
   def encode_rows(rows)
+    byebug
     Taps::Utils.base64encode(Marshal.dump(rows))
   end
 
@@ -114,6 +115,7 @@ class DataStream
 
     t1 = Time.now
     rows = fetch_rows
+    byebug
     encoded_data = encode_rows(rows)
     t2 = Time.now
     elapsed_time = t2 - t1
@@ -312,7 +314,10 @@ class DataStreamKeyed < DataStream
   end
 
   def import_rows(rows)
-    table.import(rows[:header], rows[:data])
+    byebug
+    data = rows[:data]
+    # Remove duplicates
+    table.import(rows[:header], data.uniq)
   end
 
   def fetch_rows

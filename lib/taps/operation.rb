@@ -47,7 +47,7 @@ class Operation
   end
 
   def apply_table_filter(tables)
-    return tables unless table_filter || exclude_tables
+    return tables unless table_filter || exclude_tables.any?
 
     re = table_filter ? Regexp.new(table_filter) : nil
     if tables.kind_of?(Hash)
@@ -247,13 +247,13 @@ class Pull < Operation
   def run
     catch_errors do
       unless resuming?
-        pull_schema if !skip_schema?
-        pull_indexes if indexes_first? && !skip_schema?
+        # pull_schema if !skip_schema?
+        # pull_indexes if indexes_first? && !skip_schema?
       end
       setup_signal_trap
       pull_partial_data if resuming?
       pull_data
-      pull_indexes if !indexes_first? && !skip_schema?
+      # pull_indexes if !indexes_first? && !skip_schema?
       pull_reset_sequences
     end
   end
@@ -440,7 +440,6 @@ class Push < Operation
 
     progress = ProgressBar.new('Schema', tables.size)
     tables.each do |table, count|
-      byebug
       schema_data = Taps::Utils.schema_bin(:dump_table, database_url, table)
       log.debug "Table: #{table}\n#{schema_data}\n"
       session_resource['push/schema'].post(schema_data, http_headers)
